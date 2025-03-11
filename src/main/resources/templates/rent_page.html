@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental</title>
+    <link rel="stylesheet" th:href="@{/css/rent_page_style.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="top-bar">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav class="side-menu">
+            <button type="button" class="btn btn-secondary menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-times"></i> Zamknij
+            </button>
+            <ul>
+                <li><a href="/main_page">Strona główna</a></li>
+                <span th:if="${loggedInUser}">
+                     <li><a href="/my_reservations">Moje rezerwacje</a></li>
+                 </span>
+                <li><a href="/rent">Zarezerwuj</a></li>
+                <li><a href="/calculate">Oblicz koszta</a></li>
+                <li><a href="/price_list">Cennik</a></li>
+                <li><a href="/about_us">O nas</a></li>
+                <li><a href="/contact">Kontakt</a></li>
+            </ul>
+        </nav>
+        <h1 class="h1-top-bar">
+            <span th:if="${loggedInUser}" th:text="${'Witaj, ' + loggedInUser.firstName + ' ' + loggedInUser.lastName + '!'}"></span>
+        </h1>
+        <div class="auth-buttons">
+                <span th:if="${loggedInUser}">
+                    <span th:if="${role eq 'Administrator'}">
+                        <button type="button" class="btn btn-secondary" onclick="panel()">Panel</button>
+                    </span>
+                     <span th:if="${role eq 'Moderator'}">
+                        <button type="button" class="btn btn-secondary" onclick="panel_mod()">Panel</button>
+                    </span>
+                    <span>
+                        <button type="button" class="btn btn-secondary">
+                            Portfel: <span th:text="${walletBalance}"></span> PLN
+                        </button>
+                    </span>
+                    <button type="button" class="btn btn-secondary logout-button" onclick="logout()">Wyloguj się</button>
+                </span>
+            <span th:unless="${loggedInUser}">
+                    <button type="button" class="register-button" onclick="redirectToRegister()">Rejestracja</button>
+                <button type="button" class="login-button" onclick="redirectToLogin()">Logowanie</button>
+            </span>
+        </div>
+    </div>
+</header>
+
+<div class="big-container">
+    <!-- Kategoria samochodów (select zamiast checkboxów) -->
+    <div class="category-container">
+        <label for="carCategory">Wybierz kategorię:</label>
+        <select id="carCategory" onchange="filterCars()">
+            <option value="ALL">Wszystkie</option>
+            <option value="SUV">SUV</option>
+            <option value="Sedan">Sedan</option>
+            <option value="Hatchback">Hatchback</option>
+        </select>
+        <button type="button" onclick="selectAllCars()">Wybierz wszystkie</button>
+    </div>
+
+    <!-- Kontener z samochodami -->
+    <div class="cars-container">
+        <div th:each="car : ${getAllCars}" class="car-card" data-category="${car.carcategorry}">
+            <div class="car-image">
+                <img th:if="${car.id == 1}" th:src="@{/images/car1.jpg}" alt="Obraz" width="200" height="200"/>
+                <img th:if="${car.id == 2}" th:src="@{/images/car2.jpg}" alt="Obraz" width="200" height="200"/>
+                <img th:if="${car.id == 3}" th:src="@{/images/car3.jpg}" alt="Obraz" width="200" height="200"/>
+                <img th:if="${car.id >= 4}" th:src="@{/car/image/{id}(id=${car.id})}" alt="Obraz" width="200" height="200"/>
+            </div>
+            <div class="car-details">
+                <h3 th:text="${car.number}">Numer samochodu</h3>
+                <p th:text="${car.brand}">Marka</p>
+                <p th:text="${car.available ? 'Dostępny' : 'Niedostępny'}"
+                   th:class="${car.available ? 'available' : 'not-available'}">
+                </p>
+                <p th:if="${car.available}">
+                    <button th:text="Zarezerwuj" th:if="${loggedInUser}" th:onclick="'redirectToReserveCarPage(' + ${car.id} + ')'" />
+                    <span th:unless="${loggedInUser}">Zaloguj się, aby zarezerwować</span>
+                </p>
+                <button th:onclick="'redirectToCarCommentsPage(' + ${car.id} + ')'">Komentarze</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>2025 Car Rental ©</p>
+</footer>
+
+<script>
+    // Funkcja do rozwijania i zwijania menu
+    function toggleMenu() {
+        var sideMenu = document.querySelector('.side-menu');
+        sideMenu.classList.toggle('open');
+    }
+
+    // Funkcje do przekierowania użytkownika
+    function redirectToLogin() {
+        window.location.href = "/login";
+    }
+    function redirectToRegister() {
+        window.location.href = "/register";
+    }
+    function logout() {
+        window.location.href = "/logout";
+    }
+    function panel() {
+        window.location.href = "/panel";
+    }
+    function redirectToReserveCarPage(carId) {
+        window.location = "/reserve_car/" + carId;
+    }
+
+    function redirectToCarCommentsPage(carId){
+        window.location = "/car/" + carId + "/comments";
+    }
+    function panel_mod(){
+        window.location.href = "/panel_mod";
+    }
+    function filterCars() {
+        var category = document.getElementById("carCategory").value;
+        var url = "/rent?category=" + category;
+        window.location.href = url; // Przekierowanie do nowej strony z wybraną kategorią
+    }
+    // Funkcja do filtrowania samochodów według kategorii
+    function selectAllCars() {
+        var categorySelect = document.getElementById("carCategory");
+        categorySelect.value = "ALL";  // Ustawiamy kategorię na "ALL"
+        var url = window.location.pathname + "?category=ALL"; // Tworzymy URL z kategorią ALL
+        window.location.href = url;  // Przekierowujemy do odświeżonej strony
+    }
+</script>
+</body>
+</html>

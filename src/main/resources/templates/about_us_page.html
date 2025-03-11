@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Rental</title>
+    <link rel="stylesheet" th:href="@{/css/about_us_page_style.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<header>
+    <div class="top-bar">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav class="side-menu">
+            <button type="button" class="btn btn-secondary menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-times"></i> Zamknij
+            </button>
+            <ul>
+                <li><a href="/main_page">Strona główna</a></li>
+                <span th:if="${loggedInUser}">
+                    <li><a href="/my_reservations">Moje rezerwacje</a></li>
+                </span>
+                <li><a href="/rent">Zarezerwuj</a></li>
+                <li><a href="/calculate">Oblicz koszta</a></li>
+                <li><a href="/price_list">Cennik</a></li>
+                <li><a href="/about_us">O nas</a></li>
+                <li><a href="/contact">Kontakt</a></li>
+            </ul>
+        </nav>
+        <h1 class="h1-top-bar">
+            <span th:if="${loggedInUser}" th:text="${'Witaj, ' + loggedInUser.firstName + ' ' + loggedInUser.lastName + '!'}"></span>
+        </h1>
+        <div class="auth-buttons">
+                <span th:if="${loggedInUser}">
+                    <span th:if="${role eq 'Administrator'}">
+                        <button type="button" class="btn btn-secondary" onclick="panel()">Panel</button>
+                    </span>
+                    <span th:if="${role eq 'Moderator'}">
+                        <button type="button" class="btn btn-secondary" onclick="panel_mod()">Panel mod</button>
+                    </span>
+                    <span>
+                        <button type="button" class="btn btn-secondary">
+                            Portfel: <span th:text="${walletBalance}"></span> PLN
+                        </button>
+                    </span>
+                    <button type="button" class="btn btn-secondary logout-button" onclick="logout()">Wyloguj się</button>
+                </span>
+            <span th:unless="${loggedInUser}">
+                <button type="button" class="register-button" onclick="redirectToRegister()">Rejestracja</button>
+                <button type="button" class="login-button" onclick="redirectToLogin()">Logowanie</button>
+            </span>
+        </div>
+    </div>
+</header>
+
+<section class="about-us">
+    <div class="container">
+        <div class="about-box">
+        <h2>Kim jesteśmy?</h2>
+        <p>Jako wypożyczalnia samochodów, stawiamy na jakość, wygodę oraz bezpieczeństwo naszych klientów. Nasza firma została założona z myślą o ludziach, którzy cenią sobie mobilność, komfort i szybki dostęp do niezawodnych pojazdów w przystępnych cenach. Oferujemy szeroki wybór samochodów, które spełnią oczekiwania każdego klienta.</p>
+
+        <h3>Nasza misja</h3>
+        <p>Naszą misją jest zapewnienie wyjątkowej obsługi klienta, dbanie o najwyższe standardy bezpieczeństwa oraz dostarczanie pojazdów idealnych do każdego rodzaju podróży. Chcemy być pierwszym wyborem, gdy chodzi o wypożyczalnię samochodów, gwarantując satysfakcję i wygodę w każdej sytuacji.</p>
+
+        <h3>Nasz zespół</h3>
+        <p>Naszym największym atutem jest zespół pasjonatów motoryzacji oraz profesjonalistów, którzy nieustannie dążą do zapewnienia najwyższej jakości usług. Zespół pracuje z pełnym zaangażowaniem, aby każdy klient czuł się komfortowo i bezpiecznie, korzystając z naszych pojazdów.</p>
+
+        <div class="team">
+
+            <div class="team-member">
+                <img th:src="@{/images/team_member2.jpg}" alt="Członek zespołu" class="team-photo">
+                <h4>Daniel Szałaj</h4>
+                <p>Współzałożyciel i CEO - Pasjonat motoryzacji, który włożył całe serce w rozwój naszej firmy.</p>
+            </div>
+        </div>
+
+        <h3>Nasze wartości</h3>
+        <ul>
+            <li>Bezpieczeństwo - Gwarantujemy, że wszystkie nasze pojazdy są regularnie serwisowane i gotowe na każdą podróż.</li>
+            <li>Profesjonalizm - Zależy nam na zapewnieniu najwyższego standardu obsługi na każdym etapie współpracy.</li>
+            <li>Zaufanie - Budujemy długoterminowe relacje z naszymi klientami opierając się na wzajemnym szacunku i transparentności.</li>
+        </ul>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>2025 Car Rental &copy;</p>
+</footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const teamMembers = document.querySelectorAll('.team-member');
+        const windowHeight = window.innerHeight;
+
+        function checkVisibility() {
+            teamMembers.forEach((member) => {
+                const rect = member.getBoundingClientRect();
+                if (rect.top >= 0 && rect.bottom <= windowHeight) {
+                    member.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkVisibility);
+
+        checkVisibility();
+    });
+</script>
+<script>
+    function toggleMenu() {
+        var sideMenu = document.querySelector('.side-menu');
+        sideMenu.classList.toggle('open');
+    }
+    function redirectToLogin() {
+        window.location.href = "/login";
+    }
+    function redirectToRegister() {
+        window.location.href = "/register";
+    }
+    function logout() {
+        window.location.href = "/logout";
+    }
+    function panel(){
+        window.location.href = "/panel";
+    }
+    function panel_mod() {
+        window.location.href = "/panel_mod";
+    }
+</script>
+</body>
+</html>

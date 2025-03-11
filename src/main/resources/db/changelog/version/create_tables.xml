@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--  Tabela app_user  -->
+    <changeSet id="app-user-table-create" author="admin">
+        <createTable tableName="app_user">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="username" type = "VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wallet" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!--  Tabela Report  -->
+    <changeSet id="report-table-create" author="admin">
+        <createTable tableName="report">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name_of_submitter" type="VARCHAR(255)">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="subject" type="VARCHAR(255)">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="is_resolved" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="issue-table-create" author="admin">
+        <!--        Tabel issue-->
+        <createTable tableName="issue">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="car_number" type="INTEGER">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)">
+                <constraints unique="false" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="car-table-create" author="admin">
+        <!--  Tabela car  -->
+        <createTable tableName="car">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="number" type="INTEGER">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="brand" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="BLOB">
+                <constraints nullable="true"/>
+            </column>
+            <column name="carcategorry" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="available" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="comment-table-create" author="admin">
+        <createTable tableName="comment">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="car_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="comment"
+                baseColumnNames="user_id"
+                constraintName="fk_comment_user"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="comment"
+                baseColumnNames="car_id"
+                constraintName="fk_comment_car"
+                referencedTableName="car"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="slider-image-table-create" author="admin">
+        <createTable tableName="slider_image">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="image" type="BLOB">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="reservation-table-create" author="admin">
+        <createTable tableName="reservation">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="car_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR2(10)">
+                <constraints nullable="false"/>
+            </column>
+            <!--            <column name="start_date" type="DATE">-->
+            <!--                <constraints nullable="false"/>-->
+            <!--            </column>-->
+            <!--            <column name="end_date" type="DATE"/>-->
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="reservation"
+                baseColumnNames="user_id"
+                constraintName="fk_reservation_user"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="reservation"
+                baseColumnNames="car_id"
+                constraintName="fk_reservation_car"
+                referencedTableName="car"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
+    <changeSet id="moderator-table-create" author="admin">
+        <createTable tableName="moderator">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="moderator"
+                baseColumnNames="user_id"
+                constraintName="fk_moderator_user"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
+    <changeSet id="comment-table-add-approved-column" author="admin">
+        <addColumn tableName="comment">
+            <column name="approved" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

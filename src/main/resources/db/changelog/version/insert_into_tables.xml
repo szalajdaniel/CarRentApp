@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="app-user-inserts" author="admin">
+        <insert tableName="app_user">
+            <column name="first_name" value = "Marek"/>
+            <column name="last_name" value = "Zaczyn"/>
+            <column name="email" value="m.zac@gmail.com"/>
+            <column name="username" value="Admin"/>
+            <column name="password" value="10a23e7eacabe2317f458fac266a50233d5d02b31244be70477f4d780b7d2255"/> <!-- hasloo -->
+            <column name="role" value="Administrator"/>
+            <column name="wallet" value="0"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="first_name" value = "Daniel"/>
+            <column name="last_name" value = "Szałaj"/>
+            <column name="email" value="d.szalaj@gmail.com"/>
+            <column name="username" value="Admin2"/>
+            <column name="password" value="abe31fe1a2113e7e8bf174164515802806d388cf4f394cceace7341a182271ab"/> <!-- haslo -->
+            <column name="role" value="Administrator"/>
+            <column name="wallet" value="0"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="first_name" value = "Danieal"/>
+            <column name="last_name" value = "Szałaaj"/>
+            <column name="email" value="d.szalaj@gmaaaail.com"/>
+            <column name="username" value="A"/>
+            <column name="password" value="abe31fe1a2113e7e8bf174164515802806d388cf4f394cceace7341a182271ab"/> <!-- haslo -->
+            <column name="role" value="Moderator"/>
+            <column name="wallet" value="0"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="first_name" value = "Adam"/>
+            <column name="last_name" value = "Kozak"/>
+            <column name="email" value="a.kozak@gmail.com"/>
+            <column name="username" value="Kozak"/>
+            <column name="password" value="abe31fe1a2113e7e8bf174164515802806d388cf4f394cceace7341a182271ab"/> <!-- haslo -->
+            <column name="role" value="Moderator"/>
+            <column name="wallet" value="9000"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="first_name" value = "Bartek"/>
+            <column name="last_name" value = "Nowak"/>
+            <column name="email" value="b.nowak@gmail.com"/>
+            <column name="username" value="Bartek"/>
+            <column name="password" value="abe31fe1a2113e7e8bf174164515802806d388cf4f394cceace7341a182271ab"/> <!-- haslo -->
+            <column name="role" value="Uzytkownik"/>
+            <column name="wallet" value="1500"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="first_name" value = "Kamil"/>
+            <column name="last_name" value = "Mincewicz"/>
+            <column name="email" value="k.mincewicz@gmail.com"/>
+            <column name="username" value="Kamilekekek"/>
+            <column name="password" value="abe31fe1a2113e7e8bf174164515802806d388cf4f394cceace7341a182271ab"/> <!-- haslo -->
+            <column name="role" value="Uzytkownik"/>
+            <column name="wallet" value="32000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="car-inserts" author="admin">
+        <insert tableName="car">
+            <column name="number" value="27012"/>
+            <column name="brand" value="BMW"/>
+            <column name="carcategorry" value="SUV"/>
+            <column name="available" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="number" value="27013"/>
+            <column name="brand" value="Skoda"/>
+            <column name="carcategorry" value="Hatchback"/>
+            <column name="available" value="true"/>
+        </insert>
+        <insert tableName="car">
+            <column name="number" value="27014"/>
+            <column name="brand" value="Alfa Romeo"/>
+            <column name="carcategorry" value="Sedan"/>
+            <column name="available" value="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="report-inserts" author="admin">
+        <insert tableName="report">
+            <column name="name_of_submitter">Andrzej</column>
+            <column name="description">Proszę o reset hasła, bo zapomniałem</column>
+            <column name="email">andrew.abc@gmail.com</column>
+            <column name="subject">Hasło</column>
+            <column name="is_resolved">true</column>
+        </insert>
+        <insert tableName="report">
+            <column name="name_of_submitter">Kamil</column>
+            <column name="description">Nie mogę się zarejestrować. Mam błąd.</column>
+            <column name="email">kamilek123.abc@gmail.com</column>
+            <column name="subject">Rejestracja</column>
+            <column name="is_resolved">false</column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

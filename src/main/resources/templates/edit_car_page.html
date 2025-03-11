@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/edit_car_page_style.css}">
+    <title>Events App</title>
+</head>
+<body>
+<div class="edit-container">
+    <h1>Edytuj informacje</h1>
+    <form action="/edit-car" method="POST" enctype="multipart/form-data">
+        <input type="hidden" id="carId" name="carId" th:value="${car.id}" />
+
+        <label for="number">Numer auta:</label>
+        <input type="text" id="number" name="number" th:value="${car.number}">
+
+        <label for="brand">Marka:
+            <select id="brand" name="brand" required>
+                <option value="BMW">BMW</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Skoda">Skoda</option>
+                <option value="Alfa Romeo">Alfa Romeo</option>
+                <option value="Opel">Bugatti</option>
+                <option value="Toyota">Toyota</option>
+            </select></label>
+
+
+        <label for="image">Zmień zdjęcie (opcjonalne):</label>
+        <input type="file" id="image" name="image" accept="image/*">
+
+        <label for="available">Dostępny:</label>
+        <select id="available" name="available" required>
+            <option value="true">Tak</option>
+            <option value="false">Nie</option>
+        </select>
+
+        <button type="submit">Zapisz zmiany</button>
+        <button type="button" onclick="wroc()">Powrót do panelu edycji</button>
+    </form>
+
+</div>
+<script>
+    function wroc(){
+    window.location.href = "/edit_cars_page";
+}</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental</title>
+    <link rel="stylesheet" th:href="@{/css/reserve_car_page_style.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<header>
+    <div class="top-bar">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <nav class="side-menu">
+            <button type="button" class="btn btn-secondary menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-times"></i> Zamknij
+            </button>
+            <ul>
+                <li><a href="/main_page">Strona główna</a></li>
+                <span th:if="${loggedInUser}">
+                    <li><a href="/my_reservations">Moje rezerwacje</a></li>
+                </span>
+                <li><a href="/rent">Zarezerwuj</a></li>
+                <li><a href="/calculate">Oblicz koszta</a></li>
+                <li><a href="/price_list">Cennik</a></li>
+                <li><a href="/about_us">O nas</a></li>
+                <li><a href="/contact">Kontakt</a></li>
+            </ul>
+        </nav>
+        <h1 class="h1-top-bar">
+            <span th:if="${loggedInUser}" th:text="${'Witaj, ' + loggedInUser.firstName + ' ' + loggedInUser.lastName + '!'}"></span>
+        </h1>
+        <div class="auth-buttons">
+                <span th:if="${loggedInUser}">
+                    <span th:if="${role eq 'Administrator'}">
+                        <button type="button" class="btn btn-secondary" onclick="panel()">Panel</button>
+                    </span>
+                    <span th:if="${role eq 'Moderator'}">
+                        <button type="button" class="btn btn-secondary" onclick="panel_mod()">Panel mod</button>
+                    </span>
+                    <span>
+                        <button type="button" class="btn btn-secondary">
+                            Portfel: <span th:text="${walletBalance}"></span> PLN
+                        </button>
+                    </span>
+                    <button type="button" class="btn btn-secondary logout-button" onclick="logout()">Wyloguj się</button>
+                </span>
+            <span th:unless="${loggedInUser}">
+                <button type="button" class="register-button" onclick="redirectToRegister()">Rejestracja</button>
+                <button type="button" class="login-button" onclick="redirectToLogin()">Logowanie</button>
+            </span>
+        </div>
+    </div>
+</header>
+
+<div class="center-container">
+    <div class="reserve-container">
+        <h1>Rezerwacja Samochodu</h1>
+
+        <div class="car-details">
+            <p><strong>Marka:</strong> <span th:text="${car.brand}"></span></p>
+            <p><strong>Numer samochodu:</strong> <span th:text="${car.number}"></span></p>
+        </div>
+
+        <form action="/confirm_reservation" method="POST" class="reservation-form">
+            <input type="hidden" name="carId" th:value="${car.id}" />
+            <input type="hidden" id="car-brand" name="carBrand" th:value="${car.brand}" />
+            <input type="hidden" name="amount" id="amount" value="0" />
+            <label for="rental-days">Na ile dni chcesz wypożyczyć samochód?</label>
+            <input type="number" id="rental-days" name="rentalDays" min="1" required />
+
+            <div class="price-container">
+                <p><strong>Całkowity koszt:</strong> <span id="total-cost">0 PLN</span></p>
+            </div>
+
+            <button type="submit" class="btn-confirm-reservation">Zarezerwuj</button>
+        </form>
+
+        <button class="back-btn" onclick="redirectToRentPage()">Powrót</button>
+    </div>
+</div>
+
+<footer>
+    <p>2025 Car Rental &copy;</p>
+</footer>
+
+<script>
+    const brandMapping = {
+        "Alfa Romeo": "alfa-romeo",
+        "BMW": "bmw",
+        "Skoda": "skoda",
+        "Opel": "opel",
+        "Bugatti": "bugatti",
+        "Toyota": "toyota"
+    };
+
+    const prices = {
+        bmw: { day: 350, week: 2100, month: 8000 },
+        skoda: { day: 200, week: 1200, month: 4500 },
+        "alfa-romeo": { day: 300, week: 1800, month: 7000 },
+        opel: { day: 150, week: 900, month: 3500 },
+        bugatti: { day: 2500, week: 15000, month: 50000 },
+        toyota: { day: 180, week: 1050, month: 4000 },
+    };
+
+    let carBrand = "[[${car.brand}]]".trim();
+    carBrand = brandMapping[carBrand] || carBrand.toLowerCase();
+    console.log("Marka samochodu:", carBrand);
+
+    const { day, week, month } = prices[carBrand] || { day: 0, week: 0, month: 0 };
+
+    function calculateTotalCost(rentalDays) {
+        let totalCost = 0;
+
+        if (rentalDays >= 30) {
+            totalCost = Math.floor(rentalDays / 30) * month
+                + (rentalDays % 30 >= 7
+                    ? week
+                    : rentalDays % 30 * day);
+        } else if (rentalDays >= 7) {
+            totalCost = Math.floor(rentalDays / 7) * week
+                + (rentalDays % 7 * day);
+        } else {
+            totalCost = rentalDays * day;
+        }
+
+        return totalCost;
+    }
+
+    document.getElementById("rental-days").addEventListener("input", function () {
+        const rentalDays = parseInt(this.value) || 0;
+        const totalCost = calculateTotalCost(rentalDays);
+        document.getElementById("amount").value = totalCost;
+        document.getElementById("total-cost").textContent = `${totalCost} PLN`;
+        console.log("Całkowity koszt:", totalCost);
+    });
+</script>
+<script>
+    function toggleMenu() {
+        var sideMenu = document.querySelector('.side-menu');
+        sideMenu.classList.toggle('open');
+    }
+
+    function redirectToLogin() {
+        window.location.href = "/login";
+    }
+
+    function redirectToRegister() {
+        window.location.href = "/register";
+    }
+
+    function logout() {
+        window.location.href = "/logout";
+    }
+
+    function panel() {
+        window.location.href = "/panel";
+    }
+
+    function redirectToRentPage(){
+        window.location.href = "/rent"
+    }
+    function panel_mod() {
+        window.location.href = "/panel_mod";
+    }
+</script>
+</body>
+</html>

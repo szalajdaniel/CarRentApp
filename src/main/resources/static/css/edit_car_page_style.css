@@ -1,0 +1,108 @@
+:root{
+    --primary-color: black;
+    --accent-color: #fff;
+    --neutral-color: orange;
+
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+.edit-container {
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: var(--accent-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.edit-container h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.edit-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.edit-container label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.edit-container input[type="text"],
+.edit-container textarea,
+.edit-container select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: var(--accent-color);
+    color: #333;
+}
+
+.edit-container textarea {
+    resize: vertical;
+    height: 100px;
+}
+
+.edit-container input[type="file"] {
+    padding: 5px;
+    font-size: 14px;
+    background-color: var(--accent-color);
+    border: none;
+    color: #333;
+}
+
+.edit-container button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-container button[type="button"] {
+    display: inline-block;
+    text-align: center;
+    background-color: #007bff;
+    color: var(--accent-color);
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.edit-container button[type="submit"]:hover {
+    background-color: #218838;
+}
+.edit-container button[type="button"]:hover {
+    background-color: #007bff;
+}
+
