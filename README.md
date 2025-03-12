@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/956a3bb8-7434-4b88-925e-6cb076af987c)# Project Description and Purpose
+# Project Description and Purpose
 
 The Car Rental application was created to provide users with a convenient and fast way to rent cars. The system offers an intuitive vehicle reservation process, displaying detailed information about available cars, such as the brand, vehicle number, and daily rental price.
 A built-in wallet allows users to manage their funds, with the rental cost automatically calculated and deducted from the balance upon booking.
